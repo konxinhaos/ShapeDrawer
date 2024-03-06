@@ -24,11 +24,13 @@ public class ShapeDrawer extends JFrame {
         shapeSelector.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                // 获取⽤户选择的项
                 JComboBox cb = (JComboBox) e.getSource();
                 String shapeName = (String) cb.getSelectedItem();
-                // 根据选择更新绘图区域的当前图形，并重绘
-                drawArea.setShape(shapeName);
+                String input = JOptionPane.showInputDialog("请输⼊" +
+                        shapeName + "的尺⼨:");
+                int size;
+                size = Integer.parseInt(input); // 将输⼊转换为整数
+                drawArea.setShape(shapeName, size); // 更新图形和尺⼨
             }
         });
     }
@@ -45,40 +47,30 @@ public class ShapeDrawer extends JFrame {
     }
     // DrawArea类继承⾃JPanel，⽤于⾃定义绘图逻辑
     private static class DrawArea extends JPanel {
-        // 默认绘制的图形是正⽅形
         private String shape = "正⽅形";
-        // setShape⽅法⽤于更新当前要绘制的图形
-        public void setShape(String shape) {
+        private int size = 100; // 添加尺⼨属性，默认为100
+        public void setShape(String shape, int size) {
             this.shape = shape;
-            this.repaint(); // 调⽤repaint⽅法来重绘⾯板
+            this.size = size;
+            this.repaint(); // 请求重新绘制⾯板
         }
         @Override
-        // 重写paintComponent⽅法以实现⾃定义绘图逻辑
         protected void paintComponent(Graphics g) {
-            // 调⽤⽗类的paintComponent⽅法进⾏默认的绘图操作
             super.paintComponent(g);
-            // 根据当前选择的图形，使⽤switch语句绘制相应的图形
             switch (shape) {
                 case "正⽅形":
-                    // 绘制正⽅形
-                    g.drawRect(50, 50, 100, 100);
+                    g.drawRect(50, 50, size, size);
                     break;
                 case "⻓⽅形":
-                    // 绘制⻓⽅形
-                    g.drawRect(50, 50, 150, 100);
+                    g.drawRect(50, 50, size * 2, size);
                     break;
                 case "圆形":
-                    // 绘制圆形
-                    g.drawOval(50, 50, 100, 100);
+                    g.drawOval(50, 50, size, size);
                     break;
                 case "三⻆形":
-                    // 绘制三⻆形，需要定义顶点坐标
-                    int[] xPoints = {100, 50, 150};
-                    int[] yPoints = {50, 150, 150};
-                    // 使⽤drawPolygon⽅法绘制多边形，这⾥是三⻆形
+                    int[] xPoints = {50 + size / 2, 50, 50 + size};
+                    int[] yPoints = {50, 50 + size, 50 + size};
                     g.drawPolygon(xPoints, yPoints, 3);
-                    break;
-                default:
                     break;
             }
         }
