@@ -26,10 +26,18 @@ public class ShapeDrawer extends JFrame {
             public void actionPerformed(ActionEvent e) {
                 JComboBox cb = (JComboBox) e.getSource();
                 String shapeName = (String) cb.getSelectedItem();
-                String input = JOptionPane.showInputDialog("请输⼊" +
-                        shapeName + "的尺⼨:");
-                int size;
-                size = Integer.parseInt(input); // 将输⼊转换为整数
+                int size = 0; // 初始化尺⼨变量
+                boolean validInput = false; // 标记⽤户输⼊是否有效
+                while (!validInput) { // 循环直到⽤户输⼊有效
+                    String input = JOptionPane.showInputDialog("请输⼊" + shapeName
+                            + "的尺⼨:");
+                    try {
+                        size = Integer.parseInt(input); // 尝试将输⼊转换为整数
+                        validInput = true; // 如果成功转换，标记输⼊有效并退出循环
+                    } catch (NumberFormatException ex) {
+                        JOptionPane.showMessageDialog(null, "输⼊⽆效，请输⼊⼀个整数。"); // 如果失败，提示⽤户重新输⼊
+                    }
+                }
                 drawArea.setShape(shapeName, size); // 更新图形和尺⼨
             }
         });
